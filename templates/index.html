@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Soil Erosion Prediction{% endblock %}
+
+{% block content %}
+<div class="container my-5 p-4 bg-light rounded">
+    <h1 class="text-center mb-4">Soil Erosion Prediction</h1>
+    <form action="/" method="POST" class="mb-4">
+        <div class="mb-3">
+            <label for="land_use" class="form-label">Land Use:</label>
+            <select id="land_use" name="land_use" class="form-select" required>
+                <option value="Agriculture" {% if form_data and form_data.land_use == "Agriculture" %}selected{% endif %}>Agriculture</option>
+                <option value="Forest" {% if form_data and form_data.land_use == "Forest" %}selected{% endif %}>Forest</option>
+                <option value="Urban" {% if form_data and form_data.land_use == "Urban" %}selected{% endif %}>Urban</option>
+                <option value="Water" {% if form_data and form_data.land_use == "Water" %}selected{% endif %}>Water</option>
+                <option value="Others" {% if form_data and form_data.land_use == "Others" %}selected{% endif %}>Others</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="vegetation_cover" class="form-label">Vegetation Cover Index (0.2 to 0.9):</label>
+            <input type="number" id="vegetation_cover" name="vegetation_cover" step="0.01" class="form-control" 
+                   value="{{ form_data.vegetation_cover if form_data else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="elevation" class="form-label">Elevation (in meters):</label>
+            <input type="number" id="elevation" name="elevation" step="0.01" class="form-control" 
+                   value="{{ form_data.elevation if form_data else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="annual_rainfall" class="form-label">Annual Rainfall (in mm):</label>
+            <input type="number" id="annual_rainfall" name="annual_rainfall" step="0.01" class="form-control" 
+                   value="{{ form_data.annual_rainfall if form_data else '' }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Predict</button>
+    </form>
+
+    {% if prediction %}
+        <div class="alert alert-success text-center">
+            <h4>Prediction Result</h4>
+            <p><strong>Predicted Soil Erosion Index:</strong> {{ prediction }}</p>
+            <p><strong>Risk Category:</strong> {{ risk_category }}</p>
+        </div>
+    {% elif error %}
+        <div class="alert alert-danger text-center">
+            <h4>Error</h4>
+            <p>{{ error }}</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
